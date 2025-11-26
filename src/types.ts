@@ -19,8 +19,6 @@ export type EnergyCustomGraphCalculationOperation =
 
 export interface EnergyCustomGraphCalculationTerm {
   statistic_id?: string;
-  entity?: string;
-  name?: string;
   stat_type?: EnergyCustomGraphStatisticType;
   multiply?: number;
   add?: number;
@@ -38,6 +36,7 @@ export interface EnergyCustomGraphCalculationConfig {
 
 export interface EnergyCustomGraphSeriesConfig {
   statistic_id?: string;
+  entity?: string;
   name?: string;
   stat_type?: EnergyCustomGraphStatisticType;
   chart_type?: EnergyCustomGraphChartType;
