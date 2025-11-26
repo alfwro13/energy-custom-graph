@@ -169,7 +169,7 @@ export const buildSeries = ({
   const legend: BuiltSeriesResult["legend"] = [];
   const unitBySeries = new Map<string, string | null | undefined>();
   const seriesById = new Map<string, EnergyCustomGraphSeriesConfig>();
-  const output: (LineSeriesOption | BarSeriesOption)[] = [];
+  const output: SeriesOption[] = [];
 
   type LineSeriesMeta = {
     id: string;
@@ -214,6 +214,46 @@ export const buildSeries = ({
         );
         return;
       }
+    // --- START OF INSERTED BLOCK ---
+    } else if (seriesConfig.entity && seriesConfig.entity.startsWith('weather.')) {
+      const entityState = hass.states[seriesConfig.entity];
+      // Check for standard 'forecast' attribute (Home Assistant < 2024.x or some custom integrations)
+      // If your HA is very new, you might need to check 'forecast' in a different way, but this is standard for entities.
+      const forecast = entityState?.attributes?.forecast;
+
+      if (forecast && Array.isArray(forecast)) {
+        const weatherData = forecast.map((entry: any) => {
+          const date = new Date(entry.datetime);
+          const hour = date.getHours();
+          
+          // Filter: 4 AM, 8 AM, 12 PM, 4 PM, 8 PM
+          if (hour % 4 === 0 && hour !== 0) {
+            const condition = entry.condition;
+            const iconUrl = WEATHER_ICONS[condition] || WEATHER_ICONS['sunny'];
+            
+            return {
+              value: [date.getTime(), 1],
+              symbol: 'image://' + iconUrl,
+              symbolSize: 24 
+            };
+          }
+          return null;
+        }).filter((item) => item !== null);
+
+        output.push({
+          id: seriesConfig.entity,
+          name: seriesConfig.name || 'Forecast',
+          type: 'scatter',
+          coordinateSystem: 'cartesian2d',
+          yAxisIndex: 1, // Uses the secondary right axis
+          data: weatherData,
+          symbolSize: 24,
+          z: 100,
+          tooltip: { show: false }
+        });
+        return; // Stop processing this series, move to next
+      }
+    // --- END OF INSERTED BLOCK ---
     } else if (statisticId) {
       raw = statistics?.[statisticId];
       if (!raw?.length) {
