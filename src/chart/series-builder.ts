@@ -1,3 +1,20 @@
+const WEATHER_ICONS: Record<string, string> = {
+  'clear-night': 'https://api.iconify.design/mdi:weather-night.svg?color=%239E9E9E',
+  'cloudy': 'https://api.iconify.design/mdi:weather-cloudy.svg?color=%2378909C',
+  'exceptional': 'https://api.iconify.design/mdi:alert-circle-outline.svg?color=%23FF5252', // Red alert for exceptional conditions
+  'fog': 'https://api.iconify.design/mdi:weather-fog.svg?color=%23B0BEC5',
+  'hail': 'https://api.iconify.design/mdi:weather-hail.svg?color=%23E0E0E0',
+  'lightning': 'https://api.iconify.design/mdi:weather-lightning.svg?color=%23FFEB3B',
+  'lightning-rainy': 'https://api.iconify.design/mdi:weather-lightning-rainy.svg?color=%23FFEB3B',
+  'partlycloudy': 'https://api.iconify.design/mdi:weather-partly-cloudy.svg?color=%23B0BEC5',
+  'pouring': 'https://api.iconify.design/mdi:weather-pouring.svg?color=%231E88E5',
+  'rainy': 'https://api.iconify.design/mdi:weather-rainy.svg?color=%2342A5F5',
+  'snowy': 'https://api.iconify.design/mdi:weather-snowy.svg?color=%23FFFFFF',
+  'snowy-rainy': 'https://api.iconify.design/mdi:weather-snowy-rainy.svg?color=%23E0E0E0',
+  'sunny': 'https://api.iconify.design/mdi:weather-sunny.svg?color=%23FFC107',
+  'windy': 'https://api.iconify.design/mdi:weather-windy.svg?color=%239E9E9E',
+  'windy-variant': 'https://api.iconify.design/mdi:weather-windy-variant.svg?color=%239E9E9E',
+};
 import type {
   BarSeriesOption,
   LineSeriesOption,
