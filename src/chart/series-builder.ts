@@ -215,13 +215,11 @@ export const buildSeries = ({
         return;
       }
     // --- START OF INSERTED BLOCK ---
-    } else if (seriesConfig.entity && seriesConfig.entity.startsWith('weather.')) {
+    } else if (seriesConfig.entity && hass.states[seriesConfig.entity]?.attributes?.forecast) {
       const entityState = hass.states[seriesConfig.entity];
-      // Check for standard 'forecast' attribute (Home Assistant < 2024.x or some custom integrations)
-      // If your HA is very new, you might need to check 'forecast' in a different way, but this is standard for entities.
-      const forecast = entityState?.attributes?.forecast;
+      const forecast = entityState.attributes.forecast;
 
-      if (forecast && Array.isArray(forecast)) {
+      if (Array.isArray(forecast)) {
         const weatherData = forecast.map((entry: any) => {
           const date = new Date(entry.datetime);
           const hour = date.getHours();
@@ -245,13 +243,13 @@ export const buildSeries = ({
           name: seriesConfig.name || 'Forecast',
           type: 'scatter',
           coordinateSystem: 'cartesian2d',
-          yAxisIndex: 1, // Uses the secondary right axis
+          yAxisIndex: 1,
           data: weatherData,
           symbolSize: 24,
           z: 100,
           tooltip: { show: false }
         });
-        return; // Stop processing this series, move to next
+        return; // Done with this series
       }
     // --- END OF INSERTED BLOCK ---
     } else if (statisticId) {
